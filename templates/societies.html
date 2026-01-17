@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {# Admin-only page for managing societies (adding + listing with event counts) #}
+  <h2>Manage Societies (Admin)</h2>
+
+  <h3>Add new society</h3>
+
+  {# Form to add a new society. POST goes to the same /societies route. #}
+  {# Backend will handle duplicates because society name is UNIQUE in DB. #}
+  <form method="post">
+    <p>Society name: <input type="text" name="name"></p>
+    <p><input type="submit" value="Add"></p>
+  </form>
+
+  {# Backend error message (example: empty name or duplicate society name) #}
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <hr>
+
+  {# List all societies in the system #}
+  <h3>All societies</h3>
+  <table>
+    <tr><th>Society Name</th><th>The number of events</th></tr>
+
+    {# societies list includes event_count calculated in backend query #}
+    {% for s in societies %}
+      <tr>
+        <td>{{ s['name'] }}</td>
+        <td>{{ s['event_count'] }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

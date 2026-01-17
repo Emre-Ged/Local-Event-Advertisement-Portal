@@ -1,0 +1,99 @@
+/* static/style.css */
+/* Basic reset and font */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+/* -------------------- */
+/* Top navigation bar   */
+/* -------------------- */
+.topnav {
+  overflow: hidden;
+  background-color: #1f2a44;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  background-color: #d7dde8;
+  color: #000;
+}
+
+/* -------------------- */
+/* Main content area    */
+/* -------------------- */
+.content {
+  background-color: #eef2f7;
+  padding: 16px;
+  min-height: 70vh;
+}
+
+/* -------------------- */
+/* Footer               */
+/* -------------------- */
+.footer {
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+/* -------------------- */
+/* Tables               */
+/* -------------------- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: #ffffff;
+}
+
+th,
+td {
+  border: 1px solid #bbb;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background: #dfe7f5;
+}
+
+/* -------------------- */
+/* Messages              */
+/* -------------------- */
+.error {
+  margin-top: 10px;
+  padding: 10px;
+  background: #ffe0e0;
+  border: 1px solid #ff9a9a;
+}
+
+.success {
+  margin-top: 10px;
+  padding: 10px;
+  background: #e0ffe6;
+  border: 1px solid #84d996;
+}
+
+/* -------------------- */
+/* Form elements         */
+/* -------------------- */
+button,
+input[type="submit"] {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+}

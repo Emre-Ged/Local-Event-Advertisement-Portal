@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {# Main page of the portal (Home Page) #}
+  <h2>Local Event Advertisement Portal</h2>
+
+  {# If user is not logged in, show login form #}
+  {% if not user %}
+    <h3>Login</h3>
+
+    {# Login form submits to /login route (POST) #}
+    <form method="post" action="{{ url_for('login') }}">
+      <p>Username: <input type="text" name="username" required></p>
+      <p>Password: <input type="password" name="password" required></p>
+      <p><input type="submit" value="Login"></p>
+    </form>
+
+    {# Backend error message (wrong username/password etc.) #}
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {# Link to register page if user doesn't have account #}
+    <p>New here? <a href="{{ url_for('register') }}">Register</a></p>
+  {% else %}
+    {# If logged greet the user #}
+    <p>Welcome, <b>{{ user["username"] }}</b>.</p>
+  {% endif %}
+
+  <hr>
+
+  {# Search section is always visible (logged in or not) #}
+  <h3>Search Events</h3>
+
+  {# Search form: user enters keywords + optionally selects a society #}
+  <form method="post" action="{{ url_for('search') }}">
+    <p>
+      Keywords:
+      <input type="text" name="keywords" placeholder="game jam robotics">
+    </p>
+    <p>
+      Society:
+      <select name="society">
+        {# ALL means search in all societies #}
+        <option value="ALL">All societies</option>
+
+        {# Show society list coming from DB #}
+        {% for s in societies %}
+          <option value="{{ s['societyID'] }}">{{ s['name'] }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p><input type="submit" value="Search"></p>
+  </form>
+
+{% endblock %}

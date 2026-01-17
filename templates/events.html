@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Announced Events</h2>
+
+<h3>Announce a new event</h3>
+
+{# Form for creating a new event. POST goes to the same /events route. #}
+{# validateEvent() is in static/validation.js (client side check before submit) #}
+<form method="post" id="eventForm" onsubmit="return validateEvent();">
+  {# Event name (unique in DB) #}
+  <p>Name: <input type="text" name="name" id="ev_name" required></p>
+
+  {# Time & Date is TEXT because assignment allows any string format #}
+  <p>
+  Time & Date:
+  <input type="text" name="time_date" id="ev_time" required>
+</p>
+
+  {# User must select at least one society #}
+  <p>Societies:</p>
+  {% for s in societies %}
+    <label>
+      <input type="checkbox" name="societies" value="{{ s['societyID'] }}"> {{ s['name'] }}
+    </label><br>
+  {% endfor %}
+
+  {# Event description #}
+  <p>Description:</p>
+  <p><textarea name="description" id="ev_desc" rows="4" cols="60" required></textarea></p>
+
+  {# Fee: if Free -> fee stays NULL, if Paid -> user enters a number #}
+  <p>Entry Fee:</p>
+    <label><input type="radio" id="free" name="fee_type" value="free" checked onclick="toggleFee()"> Free</label>
+    <label><input type="radio" id="paid" name="fee_type" value="paid" onclick="toggleFee()"> Paid</label>
+
+  {# Fee input box only shows when Paid is selected (toggleFee() in validation.js) #}
+  <div id="feeBox" style="display:none;">
+    <p>Fee: <input type="text" name="fee" id="ev_fee" placeholder="e.g., 50 or 50.5"></p>
+  </div>
+
+  <p><input type="submit" value="Announce"></p>
+</form>
+
+{# This div is used for JS validation errors (shown by showError()) #}
+<div id="ev_js_error" class="error" style="display:none;"></div>
+
+{# This is for backend errors (like duplicate event name etc.) #}
+{% if error %}
+  <div class="error">{{ error }}</div>
+{% endif %}
+
+<hr>
+
+<h3>My previous announcements</h3>
+
+{# Table of events announced by the logged-in user #}
+{% if my_events|length == 0 %}
+  <p>No announcements yet.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Name</th><th>Time & Date</th><th>Societies</th><th>Description</th><th>Entry Fee</th><th>Delete</th>
+  </tr>
+  {% for e in my_events %}
+  <tr>
+    <td>{{ e['name'] }}</td>
+    <td>{{ e['time_date'] }}</td>
+
+    {# event_soc_map maps eventID -> society names list/string #}
+    <td>{{ event_soc_map[e['eventID']] }}</td>
+
+    <td>{{ e['description'] }}</td>
+
+    {# fee is NULL for free events #}
+    <td>{{ "Free" if e['fee'] is none else e['fee'] }}</td>
+
+    {# Delete button (only owner can delete, backend checks this too) #}
+    <td>
+      <form method="post" action="{{ url_for('delete_event', event_id=e['eventID']) }}">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {# Simple confirmation page shown after a successful registration #}
+  <h2>Registration Successful</h2>
+
+  {# Just a message so user knows registration worked #}
+  <p>Your account has been created.</p>
+
+  {# Link back to the home page (where user can login) #}
+  <p><a href="{{ url_for('index') }}">Go back to Home Page</a></p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- Detail page for a single event (opened using "See More") -->
+  <h2>Event Details</h2>
+
+  <!-- Event basic info (pulled from DB in app.py and sent as "event") -->
+  <p><b>Name:</b> {{ event['name'] }}</p>
+
+  <!-- time_date is stored as TEXT since assignment allows any string -->
+  <p><b>Time & Date:</b> {{ event['time_date'] }}</p>
+
+  <!-- Societies list comes from DB, we join into a comma-separated string -->
+  <p><b>Societies:</b> {{ societies|join(",") }}</p>
+
+  <!-- Event description -->
+  <p><b>Description:</b> {{ event['description'] }}</p>
+
+  <!-- fee is NULL for free events, otherwise show the numeric value -->
+  <p><b>Entry Fee:</b> {{ "Free" if event['fee'] is none else event['fee'] }}</p>
+
+  <!-- Navigate back to the home page -->
+  <p><a href="{{ url_for('index') }}">Back to Home Page</a></p>
+{% endblock %}

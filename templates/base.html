@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Page title: use given title if provided, otherwise default -->
+  <title>{{ title if title else "Local Events Portal" }}</title>
+
+  <!-- Makes the page responsive on different screen sizes -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- External CSS file (required) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- External JS file for validation (required) -->
+  <script src="{{ url_for('static', filename='validation.js') }}"></script>
+</head>
+
+<body>
+  <!-- Top navigation bar -->
+  <div class="topnav">
+    <a href="{{ url_for('index') }}">Home Page</a>
+
+    {% if user %}
+      {% if user["is_admin"] == 1 %}
+        <a href="{{ url_for('societies') }}">Manage Societies</a>
+      {% else %}
+        <a href="{{ url_for('events') }}">Announced Events</a>
+      {% endif %}
+      <!-- These are common for both roles (Admin, User)  -->
+      <a href="{{ url_for('profile') }}">My Profile</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+
+      <!-- Show the logged-in username on the right side -->
+      <span style="float:right; color:#f2f2f2; padding:14px 16px;">
+        Welcome: {{ user["username"] }}
+      </span>
+    {% else %}
+      <!-- If not logged in, only show register link -->
+      <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+  </div>
+
+  <!-- Page-specific content will be inserted here -->
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Footer for all pages -->
+  <div class="footer">
+    <p>METU NCC - CNG445 Assignment 3</p>
+  </div>
+</body>
+</html>

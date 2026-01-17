@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {# Profile page where user can update fullname/email and optionally change password #}
+  <h2>My Profile</h2>
+
+  {# Success message from backend after update #}
+  {% if success %}
+    <div class="success">{{ success }}</div>
+  {% endif %}
+
+  {# Error message from backend (ex: invalid password, db issue, etc.) #}
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  {# Profile edit form posts back to the same route #}
+  {# validateProfile() is in validation.js (client-side check before submit) #}
+  <form method="post" onsubmit="return validateProfile();">
+    {# Username is shown but not editable (primary key) #}
+    <p>Username: <input type="text" value="{{ profile['username'] }}" disabled></p>
+
+    {# User can edit fullname #}
+    <p>Full name: <input type="text" name="fullname" id="pf_fullname" value="{{ profile['fullname'] }}"></p>
+
+    {# User can edit email #}
+    <p>Email: <input type="text" name="email" id="pf_email" value="{{ profile['email'] }}"></p>
+
+    {# Password is optional: if user leaves it blank, password stays same #}
+    <p>New Password (optional): <input type="password" name="password" id="pf_password"></p>
+
+    <p><input type="submit" value="Edit"></p>
+  </form>
+
+  {# Error box used by JavaScript validation (shown/hidden in validation.js) #}
+  <div id="pf_js_error" class="error" style="display:none;"></div>
+{% endblock %}

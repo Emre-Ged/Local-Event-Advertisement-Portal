@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {# Search page: user enters keywords and optionally filters by one society #}
+  <h2>Search Events</h2>
+
+  {# Search form posts to the same /search route #}
+  <form method="post">
+    <p>Keywords:
+      {# Keep the previous keywords in the input so user doesn't lose it after search #}
+      <input type="text" name="keywords" value="{{ keyword_text }}" placeholder="game jam robotics">
+    </p>
+
+    <p>Society:
+      {# Society dropdown: ALL means search across all societies #}
+      <select name="society">
+        <option value="ALL" {% if selected_society == "ALL" %}selected{% endif %}>All societies</option>
+
+        {# List societies coming from the DB #}
+        {% for s in societies %}
+          <option value="{{ s['societyID'] }}" {% if selected_society == (s['societyID']|string) %}selected{% endif %}>
+            {{ s['name'] }}
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+    <p><input type="submit" value="Search"></p>
+  </form>
+
+  {# Error message from backend (example: no keyword entered) #}
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <hr>
+
+  {# Results are shown grouped by society name #}
+  {% if results_by_soc %}
+    {% for soc_name, rows in results_by_soc.items() %}
+      <h3>{{ soc_name }}:</h3>
+
+      {# If no events match under this society #}
+      {% if rows|length == 0 %}
+        <p>No events.</p>
+      {% else %}
+        <table>
+          <tr><th>Title</th><th>Description</th><th>Time & Date</th><th>Entry Fee</th><th>See More</th></tr>
+
+          {# Each row is one matching event #}
+          {% for e in rows %}
+            <tr>
+              <td>{{ e['name'] }}</td>
+              <td>{{ e['description'] }}</td>
+              <td>{{ e['time_date'] }}</td>
+
+              {# fee is NULL for free events #}
+              <td>{{ "Free" if e['fee'] is none else e['fee'] }}</td>
+
+              {# Link to event detail page #}
+              <td><a href="{{ url_for('event_detail', event_id=e['eventID']) }}">See More</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    {% endfor %}
+
+  {% else %}
+    {# When user just opened the page and didn't search yet #}
+    <p>Use the form above to search.</p>
+  {% endif %}
+{% endblock %}
